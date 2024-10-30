@@ -189,8 +189,15 @@ class QrCodeService
     
     protected function saveImage($image): string
     {
+        $directory = storage_path('app/public/qrcodes');
+        
+        // Ensure directory exists
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+        
         $filename = time() . '.' . $this->config['qrFormat'];
-        $path = storage_path('app/public/qrcodes/' . $filename);
+        $path = $directory . '/' . $filename;
         
         if ($image instanceof \Intervention\Image\Image) {
             $image->save($path);
